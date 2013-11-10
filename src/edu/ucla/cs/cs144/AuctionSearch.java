@@ -70,14 +70,16 @@ public class AuctionSearch implements IAuctionSearch {
 			
 			List<SearchResult> results = new ArrayList<SearchResult>();
 			
-			for(int i = 0; i < hits.length(); i++)
+			for(int i = numResultsToSkip; i < hits.length(); i++)
 			{
 				Document doc = hits.doc(i);
 				SearchResult result = new SearchResult(doc.get("id"), doc.get("name"));
-				
 				results.add(result);
+				
+				if(results.size() == numResultsToReturn)
+					break;
 			}
-	
+			
 			return results.toArray(new SearchResult[results.size()]);
 			
 		} catch (IOException e) {
