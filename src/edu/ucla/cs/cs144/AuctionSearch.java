@@ -72,10 +72,17 @@ public class AuctionSearch implements IAuctionSearch {
 			
 			for(int i = numResultsToSkip; i < hits.length(); i++)
 			{
+				// Grab the corresponding document
 				Document doc = hits.doc(i);
+				
+				// Create and add a result to our array list
 				SearchResult result = new SearchResult(doc.get("id"), doc.get("name"));
 				results.add(result);
 				
+				// Break if we've fulfilled the desired numResultsToReturn
+				// Note that this handles the requirement:
+				//  "In case numResultsToReturn is 0, return ALL matching items starting from numResultsToSkip"
+				//  because this comparison will never be made until results.size() equals at least 1
 				if(results.size() == numResultsToReturn)
 					break;
 			}
