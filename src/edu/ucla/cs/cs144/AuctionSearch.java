@@ -99,8 +99,27 @@ public class AuctionSearch implements IAuctionSearch {
 		return new SearchResult[0];
 	}
 
-	public SearchResult[] advancedSearch(SearchConstraint[] constraints, int numResultsToSkip, int numResultsToReturn) {
-		// TODO: Your code here!
+	public SearchResult[] advancedSearch(SearchConstraint[] constraints, int numResultsToSkip, int numResultsToReturn) 
+	{
+		// Strategy:
+		// Iterate through constraints and build Lucene and MySQL queries in parallel
+		// Execute both queries and keep the intersection of the results (AND)
+		// Return the results based on return offset/num constraints
+		
+		// Lucene index
+		// item name
+		// category
+		// description
+		
+		// name:"Mariott" AND description:"Comfortable"
+		
+		// Mysql search
+		// seller
+		// buy price
+		// bidder
+		// ending time
+		
+		
 		return new SearchResult[0];
 	}
 
