@@ -25,7 +25,12 @@ public class LuceneSearchEngine {
   }
 
   public Hits performBasicSearch(String queryString) throws IOException, ParseException {
-    Query query = parser.parse(queryString);
+
+	// Sanitize the query string
+	String santizedQuery = QueryParser.escape(queryString);
+	  
+	// Create the query and execute the search
+    Query query = parser.parse(santizedQuery);
     Hits hits = searcher.search(query);
     return hits;
   }
