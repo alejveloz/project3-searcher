@@ -16,14 +16,34 @@ public class AuctionSearchTest {
 		String message = "Test message";
 		String reply = as.echo(message);
 		System.out.println("Reply: " + reply);
+		System.out.println("");
 		
-		String query = "superman";
-		SearchResult[] basicResults = as.basicSearch(query, 0, 20);
-		System.out.println("Basic Seacrh Query: " + query);
-		System.out.println("Received " + basicResults.length + " results");
-		for(SearchResult result : basicResults) {
-			System.out.println(result.getItemId() + ": " + result.getName());
+		String query1 = "superman";
+		SearchResult[] basicResults1 = as.basicSearch(query1, 0, 0);
+		System.out.println("Basic Search Query: " + query1);
+		System.out.println("Received " + basicResults1.length + " results");
+		for(SearchResult result : basicResults1) {
+			//System.out.println(result.getItemId() + ": " + result.getName());
 		}
+		System.out.println("");
+		
+		String query2 = "kitchenware";
+		SearchResult[] basicResults2 = as.basicSearch(query2, 0, 0);
+		System.out.println("Basic Search Query: " + query2);
+		System.out.println("Received " + basicResults2.length + " results");
+		for(SearchResult result : basicResults2) {
+			//System.out.println(result.getItemId() + ": " + result.getName());
+		}
+		System.out.println("");
+		
+		String query3 = "star trek";
+		SearchResult[] basicResults3 = as.basicSearch(query3, 0, 0);
+		System.out.println("Basic Search Query: " + query3);
+		System.out.println("Received " + basicResults3.length + " results");
+		for(SearchResult result : basicResults3) {
+			//System.out.println(result.getItemId() + ": " + result.getName());
+		}
+		System.out.println("");
 		
 		SearchConstraint constraint =
 		    new SearchConstraint(FieldName.BuyPrice, "5.99"); 
@@ -34,11 +54,13 @@ public class AuctionSearchTest {
 		for(SearchResult result : advancedResults) {
 			System.out.println(result.getItemId() + ": " + result.getName());
 		}
+		System.out.println("");
 		
 		String itemId = "1497595357";
 		String item = as.getXMLDataForItemId(itemId);
 		System.out.println("XML data for ItemId: " + itemId);
 		System.out.println(item);
+		System.out.println("");
 
 		// Add your own test here
 	}
