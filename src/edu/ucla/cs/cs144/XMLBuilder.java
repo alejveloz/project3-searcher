@@ -91,14 +91,19 @@ public class XMLBuilder {
 			Element currentlyElement = doc.createElement("Currently");
 			itemElement.appendChild(currentlyElement);
 			currentlyElement.appendChild(doc.createTextNode(item.currentBidAmount));
-			
+
+			// Buy_Price element
 			if(item.buyPrice != null)
 			{
-				// Buy_Price element
 				Element buyPriceElement = doc.createElement("Buy_Price");
 				itemElement.appendChild(buyPriceElement);
 				buyPriceElement.appendChild(doc.createTextNode(item.buyPrice));
 			}
+			
+			// First_Bid element
+			Element firstBidElement = doc.createElement("First_Bid");
+			itemElement.appendChild(firstBidElement);
+			firstBidElement.appendChild(doc.createTextNode(item.firstMinimumBid));
 			
 			// staff elements
 			/*Element staff = doc.createElement("Staff");
