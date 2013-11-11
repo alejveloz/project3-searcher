@@ -466,20 +466,20 @@ public class AuctionSearch implements IAuctionSearch {
 		Connection conn = null;
 		Statement stmt = null;
 		
+		// Objects to build
+		Item item = null;
+		String sellerId = null;
+		User seller = null;
+		ArrayList<String> categories = null;
+		ArrayList<String> bidderIds = null;
+		ArrayList<User> bidders = null;
+		
 		// Execute the queries
     	try {
     		
     		conn = DbManager.getConnection(true);
 			stmt = conn.createStatement();
-			
-			// Objects to build
-			Item item = null;
-			String sellerId = null;
-			User seller = null;
-			ArrayList<String> categories = null;
-			ArrayList<String> bidderIds = null;
-			ArrayList<User> bidders = null;
-			
+
 			// Item query to get general info
 	    	ResultSet itemRS = stmt.executeQuery("SELECT * FROM Item WHERE id =" + itemId);
 	    	while (itemRS.next()) 
