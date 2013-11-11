@@ -50,7 +50,7 @@ public class AuctionSearchTest {
 		System.out.println("Advanced Seacrh");
 		System.out.println("Received " + advancedResults1.length + " results");
 		for(SearchResult result : advancedResults1) {
-			System.out.println(result.getItemId() + ": " + result.getName());
+			//System.out.println(result.getItemId() + ": " + result.getName());
 		}
 		System.out.println("");
 		
@@ -62,7 +62,7 @@ public class AuctionSearchTest {
 		System.out.println("Advanced Seacrh");
 		System.out.println("Received " + advancedResults2.length + " results");
 		for(SearchResult result : advancedResults2) {
-			System.out.println(result.getItemId() + ": " + result.getName());
+			//System.out.println(result.getItemId() + ": " + result.getName());
 		}
 		System.out.println("");
 		
@@ -74,7 +74,7 @@ public class AuctionSearchTest {
 		System.out.println("Advanced Seacrh");
 		System.out.println("Received " + advancedResults3.length + " results");
 		for(SearchResult result : advancedResults3) {
-			System.out.println(result.getItemId() + ": " + result.getName());
+			//System.out.println(result.getItemId() + ": " + result.getName());
 		}
 		System.out.println("");
 		
