@@ -166,6 +166,10 @@ public class XMLBuilder {
 			itemElement.appendChild(locationElement);
 			locationElement.appendChild(doc.createTextNode(seller.location));
 
+			// Country element
+			Element countryElement = doc.createElement("Country");
+			itemElement.appendChild(countryElement);
+			countryElement.appendChild(doc.createTextNode(seller.country));
 			
 			// staff elements
 			/*Element staff = doc.createElement("Staff");
