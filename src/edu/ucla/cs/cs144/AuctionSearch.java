@@ -157,10 +157,41 @@ public class AuctionSearch implements IAuctionSearch {
 			}
 		}
 		
-		// Lucene query format
+		// Build a lucene query
 		// 	name:"Mariott" AND description:"Comfortable" ...
+		String luceneQuery = null;
+		for(int i = 0; i < luceneConstraints.size(); i++)
+		{
+			if(i == 0)
+				luceneQuery = luceneConstraints.get(i);
+			else
+				luceneQuery += " AND " + luceneConstraints.get(i);
+		}
+
 		
-		// Build SearchResults[] luceneResults
+		// Build List<SearchResults> luceneResults if we've built a Lucene query
+		List<SearchResult> luceneResults = new ArrayList<SearchResult>();
+		if(luceneQuery != null)
+		{
+			try {
+				Hits hits = luceneSearchEngine.performAdvancedSearch(luceneQuery);
+				
+				for(int i = 0; i < hits.length(); i++)
+				{
+					// Grab the corresponding document
+					Document doc = hits.doc(i);
+					
+					// Create and add a result to our array list
+					SearchResult result = new SearchResult(doc.get("id"), doc.get("name"));
+					luceneResults.add(result);
+				}
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		
 		// Narrow down one constraint at a time
