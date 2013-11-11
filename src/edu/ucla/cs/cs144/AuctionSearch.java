@@ -538,7 +538,13 @@ public class AuctionSearch implements IAuctionSearch {
 	    	}
 	    	
 			// ItemCategory query to get categories
-			
+	    	ResultSet categoriesRS = stmt.executeQuery("SELECT category FROM ItemCategory WHERE iid = " + itemId);
+	    	categories = new ArrayList<String>();
+	    	while (categoriesRS.next()) 
+	    	{
+	    		categories.add(categoriesRS.getString("category"));
+	    	}
+	    	
 			// Bid query to get all bidders
 			
 			// Series of User queries to get bidder info
