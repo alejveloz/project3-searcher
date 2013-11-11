@@ -30,6 +30,9 @@ import edu.ucla.cs.cs144.SearchResult;
 public class AuctionSearch implements IAuctionSearch {
 
 	LuceneSearchEngine luceneSearchEngine;
+
+	SimpleDateFormat inputFormat;
+	SimpleDateFormat sqlFormat;
 	
 	/* 
          * You will probably have to use JDBC to access MySQL data
@@ -58,6 +61,9 @@ public class AuctionSearch implements IAuctionSearch {
 			System.out.println("IOException creating Lucene Search Engine");
 			e.printStackTrace();
 		}
+		
+		inputFormat = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
+		sqlFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	}
 	
 	public SearchResult[] basicSearch(String query, int numResultsToSkip, int numResultsToReturn) 
@@ -111,9 +117,6 @@ public class AuctionSearch implements IAuctionSearch {
 		String sellerConstraint = null;
 		String buyPriceConstraint = null;
 		String endTimeConstraint = null;
-
-		SimpleDateFormat inputFormat = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
-		SimpleDateFormat sqlFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		for(int i = 0; i < constraints.length; i++)
 		{
@@ -465,13 +468,42 @@ public class AuctionSearch implements IAuctionSearch {
 		
 		// Execute the queries
     	try {
+    		
     		conn = DbManager.getConnection(true);
 			stmt = conn.createStatement();
-    	
-
-			// This requires a series of SQL queries to get all the data required to compose one item
+			
+			// Objects to build
+			Item item = null;
+			User seller = null;
+			ArrayList<String> categories = null;
+			ArrayList<Bid> bids = null;
+			ArrayList<User> bidders = null;
 			
 			// Item query to get general info
+	    	ResultSet itemRS = stmt.executeQuery("SELECT * FROM Item WHERE id =" + itemId);
+	    	
+	    	// Process each result
+	    	while (itemRS.next()) 
+	    	{
+	    		// Check if we're somehow analyzing a second matching item
+	    		if(item != null)
+	    		{
+	    			System.out.println("Database inconsistency, duplicate Items");
+	    			break;
+	    		}
+	    		
+	    		item = new Item();
+	    		
+	    		item.itemID = itemRS.getInt("id");
+	    		item.name = itemRS.getString("name");
+	    		item.buyPrice = Float.toString(itemRS.getFloat("buy_price"));
+	    		item.firstMinimumBid = Float.toString(itemRS.getFloat("first_bid"));
+	    		item.started = itemRS.getDate("started");
+	    		item.ends = itemRS.getDate("ends");
+	    		item.description = itemRS.getString("description");
+	    		item.numBids = itemRS.getInt("number_of_bids");
+	    		item.currentBidAmount = Float.toString(itemRS.getFloat("currently"));
+	    	}
 			
 			// ItemSeller query to get seller's ID
 			
