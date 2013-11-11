@@ -583,6 +583,14 @@ public class AuctionSearch implements IAuctionSearch {
     		return null;
     	}
 		
+    	// With the following items populated, building the XML response should be trivial
+		//  Item item = null;
+		//  String sellerId = null;
+		//  User seller = null;
+		//  ArrayList<String> categories = null;
+		//  ArrayList<String> bidderIds = null;
+		//  ArrayList<User> bidders = null;
+		
     	// TODO: Use real XML return
 		return "<Result>Under Construction</Result>";
 	}
