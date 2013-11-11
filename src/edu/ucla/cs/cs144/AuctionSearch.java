@@ -354,17 +354,17 @@ public class AuctionSearch implements IAuctionSearch {
     	
 		
 		// Create the intersection of List<SearchResult> luceneResults List<SearchResult> mySQLResults
-    	List<SearchResult> results = new ArrayList<SearchResult>();
+    	List<SearchResult> fullResults = new ArrayList<SearchResult>();
     	
     	// If there are no lucene constraints, use mysql results
     	if(!luceneConstraintsExist)
     	{
-    		results = mySQLResults;
+    		fullResults = mySQLResults;
     	}
     	// If lucene constraints exist and there are no sql constraints, lucene results are valid
     	else if(!sqlConstraintsExist)
     	{
-    		results = luceneResults;
+    		fullResults = luceneResults;
     	}
     	// Otherwise we must calculate the intersection
     	else
@@ -376,17 +376,32 @@ public class AuctionSearch implements IAuctionSearch {
     				SearchResult lucene = luceneResults.get(i);
     				SearchResult mySQL = mySQLResults.get(j);
     				
+    				// Compare current lucene result and mysql result
     				if(lucene.getItemId().equals(mySQL.getItemId()) && lucene.getName().equals(mySQL.getName()))
     				{
-    					results.add(new SearchResult(lucene.getItemId(), lucene.getName()));
+    					fullResults.add(lucene);
     				}
     			}
     		}
     	}
     	
 		// Return the specified offset/number of results
+    	List<SearchResult> results = new ArrayList<SearchResult>();
 		
-		return new SearchResult[0];
+		for(int i = numResultsToSkip; i < fullResults.size(); i++)
+		{
+			// Add the current item to our subset list
+			results.add(fullResults.get(i));
+			
+			// Break if we've fulfilled the desired numResultsToReturn
+			// Note that this handles the requirement:
+			//  "In case numResultsToReturn is 0, return ALL matching items starting from numResultsToSkip"
+			//  because this comparison will never be made until results.size() equals at least 1
+			if(results.size() == numResultsToReturn)
+				break;
+		}
+		
+		return results.toArray(new SearchResult[results.size()]);
 	}
 
 	public String getXMLDataForItemId(String itemId) {
