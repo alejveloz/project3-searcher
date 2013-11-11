@@ -181,6 +181,19 @@ public class XMLBuilder {
 			itemElement.appendChild(endsElement);
 			endsElement.appendChild(doc.createTextNode(inputFormat.format(item.ends)));
 			
+			// Seller element
+			Element sellerElement = doc.createElement("Seller");
+			itemElement.appendChild(sellerElement);
+
+			// Seller attributes
+			sellerElement.setAttribute("UserID", seller.userID);
+			sellerElement.setAttribute("Rating", Integer.toString(seller.rating));
+
+			// Description element
+			Element descriptionElement = doc.createElement("Description");
+			itemElement.appendChild(descriptionElement);
+			descriptionElement.appendChild(doc.createTextNode(item.description));
+			
 			// staff elements
 			/*Element staff = doc.createElement("Staff");
 			rootElement.appendChild(staff);
