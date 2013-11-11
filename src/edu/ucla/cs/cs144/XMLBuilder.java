@@ -2,6 +2,7 @@ package edu.ucla.cs.cs144;
 
 import java.io.File;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +22,12 @@ import org.w3c.dom.Element;
 
 public class XMLBuilder {
 
+
+	SimpleDateFormat inputFormat;
+	
 	public XMLBuilder()
 	{
-		
+		inputFormat = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
 	}
 	
 	public String itemXMLString(Item item, User seller, List<String> categories, List<Bid> bids, List<User> bidders)
@@ -104,6 +108,59 @@ public class XMLBuilder {
 			Element firstBidElement = doc.createElement("First_Bid");
 			itemElement.appendChild(firstBidElement);
 			firstBidElement.appendChild(doc.createTextNode(item.firstMinimumBid));
+			
+			// Number_of_Bids element
+			Element numberOfBidsElement = doc.createElement("Number_of_Bids");
+			itemElement.appendChild(numberOfBidsElement);
+			numberOfBidsElement.appendChild(doc.createTextNode(Integer.toString(item.numBids)));
+			
+			// Bids
+			Element bidsElement = doc.createElement("Bids");
+			itemElement.appendChild(bidsElement);
+			
+			// Bids children
+			for(int i = 0; i < bids.size(); i++)
+			{
+				// Bid element
+				Element bidElement = doc.createElement("Bid");
+				bidsElement.appendChild(bidElement);
+				
+				// Bidder element
+				Element bidderElement = doc.createElement("Bidder");
+				bidElement.appendChild(bidderElement);
+				
+				// Bidder attributes
+				bidderElement.setAttribute("UserID", bids.get(i).userID);
+				bidderElement.setAttribute("Rating", Integer.toString(bidders.get(i).rating));
+				
+				// Location element
+				if(bidders.get(i).location != null)
+				{
+					Element locationElement = doc.createElement("Location");
+					bidderElement.appendChild(locationElement);
+					locationElement.appendChild(doc.createTextNode(bidders.get(i).location));
+				}
+				
+				// Country element
+				if(bidders.get(i).country != null)
+				{
+					Element countryElement = doc.createElement("Country");
+					bidderElement.appendChild(countryElement);
+					countryElement.appendChild(doc.createTextNode(bidders.get(i).country));
+				}
+				
+				// Time element
+				Element timeElement = doc.createElement("Time");
+				bidElement.appendChild(timeElement);
+				timeElement.appendChild(doc.createTextNode(inputFormat.format(bids.get(i).time)));
+
+				// Amount element
+				Element amountElement = doc.createElement("Amount");
+				bidElement.appendChild(amountElement);
+				amountElement.appendChild(doc.createTextNode(bids.get(i).amount));
+				
+			}
+
 			
 			// staff elements
 			/*Element staff = doc.createElement("Staff");
