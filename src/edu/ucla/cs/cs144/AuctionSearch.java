@@ -482,8 +482,6 @@ public class AuctionSearch implements IAuctionSearch {
 			
 			// Item query to get general info
 	    	ResultSet itemRS = stmt.executeQuery("SELECT * FROM Item WHERE id =" + itemId);
-	    	
-	    	// Process each result
 	    	while (itemRS.next()) 
 	    	{
 	    		// Check if we're somehow analyzing a second matching item
@@ -508,7 +506,6 @@ public class AuctionSearch implements IAuctionSearch {
 			
 			// ItemSeller query to get seller's ID
 	    	ResultSet sellerIdRS = stmt.executeQuery("SELECT uid FROM ItemSeller WHERE iid =" + itemId);
-	    	
 	    	while (sellerIdRS.next()) 
 	    	{
 	    		// Check if we're somehow analyzing a second matching seller
