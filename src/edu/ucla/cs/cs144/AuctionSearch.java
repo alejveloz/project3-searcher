@@ -477,7 +477,7 @@ public class AuctionSearch implements IAuctionSearch {
 			String sellerId = null;
 			User seller = null;
 			ArrayList<String> categories = null;
-			ArrayList<Bid> bids = null;
+			ArrayList<String> bidderIds = null;
 			ArrayList<User> bidders = null;
 			
 			// Item query to get general info
@@ -545,7 +545,13 @@ public class AuctionSearch implements IAuctionSearch {
 	    		categories.add(categoriesRS.getString("category"));
 	    	}
 	    	
-			// Bid query to get all bidders
+			// Bid query to get all bids
+	    	ResultSet bidsRS = stmt.executeQuery("SELECT uid FROM Bid WHERE iid = " + itemId);
+	    	bidderIds = new ArrayList<String>();
+	    	while (bidsRS.next()) 
+	    	{
+	    		bidderIds.add(bidsRS.getString("uid"));
+	    	}
 			
 			// Series of User queries to get bidder info
 	    	
