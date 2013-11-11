@@ -419,7 +419,75 @@ public class AuctionSearch implements IAuctionSearch {
 	}
 
 	public String getXMLDataForItemId(String itemId) {
-		// TODO: Your code here!
+		/*
+		 * <!ELEMENT Items            (Item*)>
+		   <!ELEMENT Item             (Name, Category+, Currently, Buy_Price?,
+                            First_Bid, Number_of_Bids,
+			    Bids, Location, Country, Started, Ends,
+			    Seller, Description)>
+		   <!ATTLIST Item             ItemID CDATA #REQUIRED>
+		     <!ELEMENT Name	   (#PCDATA)>
+		     <!ELEMENT Category	   (#PCDATA)> 
+		     <!ELEMENT Currently	   (#PCDATA)> 
+		     <!ELEMENT Buy_Price      (#PCDATA)>
+		     <!ELEMENT First_Bid	   (#PCDATA)>
+		     <!ELEMENT Number_of_Bids (#PCDATA)>
+		     <!ELEMENT Bids           (Bid*)>
+		       <!ELEMENT Bid          (Bidder, Time, Amount)>
+		         <!ATTLIST Bidder     UserID CDATA #REQUIRED
+		   			   Rating CDATA #REQUIRED>    
+		         <!ELEMENT Bidder     (Location?, Country?)>
+		         <!ELEMENT Time	   (#PCDATA)>
+		         <!ELEMENT Amount	   (#PCDATA)>
+		     <!ELEMENT Location	   (#PCDATA)>
+		     <!ELEMENT Country	   (#PCDATA)>
+		     <!ELEMENT Started	   (#PCDATA)>
+		     <!ELEMENT Ends	   (#PCDATA)>
+		     <!ELEMENT Seller	   EMPTY>
+		     <!ATTLIST Seller         UserID CDATA #REQUIRED
+		   			   Rating CDATA #REQUIRED>
+		     <!ELEMENT Description	   (#PCDATA)>
+		 */
+		
+		
+		// This requires a series of SQL queries to get all the data required to compose one item
+		//  Item query to get general info				
+		//  ItemSeller query to get seller's ID			
+		//  User query to get Seller's info		
+		//  ItemCategory query to get categories		
+		//  Bid query to get all bidders			
+		//  Series of User queries to get bidder info
+		
+		
+		// Create connection and statement variables
+		Connection conn = null;
+		Statement stmt = null;
+		
+		// Execute the queries
+    	try {
+    		conn = DbManager.getConnection(true);
+			stmt = conn.createStatement();
+    	
+
+			// This requires a series of SQL queries to get all the data required to compose one item
+			
+			// Item query to get general info
+			
+			// ItemSeller query to get seller's ID
+			
+			// User query to get Seller's info
+			
+			// ItemCategory query to get categories
+			
+			// Bid query to get all bidders
+			
+			// Series of User queries to get bidder info
+
+    	} catch (SQLException ex) {
+    		System.out.println(ex);
+    		return null;
+    	}
+		
 		return null;
 	}
 	
