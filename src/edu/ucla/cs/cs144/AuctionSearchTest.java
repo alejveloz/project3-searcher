@@ -45,16 +45,40 @@ public class AuctionSearchTest {
 		}
 		System.out.println("");
 		
-		SearchConstraint constraint =
-		    new SearchConstraint(FieldName.BuyPrice, "5.99"); 
-		SearchConstraint[] constraints = {constraint};
-		SearchResult[] advancedResults = as.advancedSearch(constraints, 0, 20);
+		SearchConstraint[] constraints1 = {new SearchConstraint(FieldName.BuyPrice, "5.99")};
+		SearchResult[] advancedResults1 = as.advancedSearch(constraints1, 0, 20);
 		System.out.println("Advanced Seacrh");
-		System.out.println("Received " + advancedResults.length + " results");
-		for(SearchResult result : advancedResults) {
+		System.out.println("Received " + advancedResults1.length + " results");
+		for(SearchResult result : advancedResults1) {
 			System.out.println(result.getItemId() + ": " + result.getName());
 		}
 		System.out.println("");
+		
+		SearchConstraint[] constraints2 = {
+				new SearchConstraint(FieldName.ItemName, "pan"),
+				new SearchConstraint(FieldName.Category, "kitchenware")
+				};
+		SearchResult[] advancedResults2 = as.advancedSearch(constraints2, 0, 20);
+		System.out.println("Advanced Seacrh");
+		System.out.println("Received " + advancedResults2.length + " results");
+		for(SearchResult result : advancedResults2) {
+			System.out.println(result.getItemId() + ": " + result.getName());
+		}
+		System.out.println("");
+		
+		SearchConstraint[] constraints3 = {
+				new SearchConstraint(FieldName.ItemName, "Precious Moments"),
+				new SearchConstraint(FieldName.SellerId, "waltera317a")
+				};
+		SearchResult[] advancedResults3 = as.advancedSearch(constraints3, 0, 20);
+		System.out.println("Advanced Seacrh");
+		System.out.println("Received " + advancedResults3.length + " results");
+		for(SearchResult result : advancedResults3) {
+			System.out.println(result.getItemId() + ": " + result.getName());
+		}
+		System.out.println("");
+		
+		//EndTime:Dec-14-01 21:00:05 (1)
 		
 		String itemId = "1497595357";
 		String item = as.getXMLDataForItemId(itemId);
