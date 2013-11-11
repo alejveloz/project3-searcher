@@ -94,20 +94,20 @@ public class XMLBuilder {
 			// Current element
 			Element currentlyElement = doc.createElement("Currently");
 			itemElement.appendChild(currentlyElement);
-			currentlyElement.appendChild(doc.createTextNode(item.currentBidAmount));
+			currentlyElement.appendChild(doc.createTextNode("$" + item.currentBidAmount));
 
 			// Buy_Price element
-			if(item.buyPrice != null)
+			if(item.buyPrice != null && item.buyPrice != "0.0")
 			{
 				Element buyPriceElement = doc.createElement("Buy_Price");
 				itemElement.appendChild(buyPriceElement);
-				buyPriceElement.appendChild(doc.createTextNode(item.buyPrice));
+				buyPriceElement.appendChild(doc.createTextNode("$" + item.buyPrice));
 			}
 			
 			// First_Bid element
 			Element firstBidElement = doc.createElement("First_Bid");
 			itemElement.appendChild(firstBidElement);
-			firstBidElement.appendChild(doc.createTextNode(item.firstMinimumBid));
+			firstBidElement.appendChild(doc.createTextNode("$" + item.firstMinimumBid));
 			
 			// Number_of_Bids element
 			Element numberOfBidsElement = doc.createElement("Number_of_Bids");
@@ -130,8 +130,8 @@ public class XMLBuilder {
 				bidElement.appendChild(bidderElement);
 				
 				// Bidder attributes
-				bidderElement.setAttribute("UserID", bids.get(i).userID);
 				bidderElement.setAttribute("Rating", Integer.toString(bidders.get(i).rating));
+				bidderElement.setAttribute("UserID", bids.get(i).userID);
 				
 				// Location element
 				if(bidders.get(i).location != null)
@@ -157,7 +157,7 @@ public class XMLBuilder {
 				// Amount element
 				Element amountElement = doc.createElement("Amount");
 				bidElement.appendChild(amountElement);
-				amountElement.appendChild(doc.createTextNode(bids.get(i).amount));
+				amountElement.appendChild(doc.createTextNode("$" + bids.get(i).amount));
 				
 			}
 
