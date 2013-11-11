@@ -267,7 +267,7 @@ public class AuctionSearch implements IAuctionSearch {
 			
 			String endTimeMySQLCondition = null;
 			if(endTimeConstraint != null)
-				endTimeMySQLCondition = "ends = '" + endTimeMySQLCondition + "'";
+				endTimeMySQLCondition = "ends = '" + endTimeConstraint + "'";
 		
 			// Build the remainder of the query
 			mainQuery += " WHERE ";
