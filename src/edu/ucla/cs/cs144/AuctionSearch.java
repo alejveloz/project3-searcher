@@ -111,6 +111,9 @@ public class AuctionSearch implements IAuctionSearch {
 		String sellerConstraint = null;
 		String buyPriceConstraint = null;
 		String endTimeConstraint = null;
+
+		SimpleDateFormat inputFormat = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
+		SimpleDateFormat sqlFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		for(int i = 0; i < constraints.length; i++)
 		{
@@ -149,7 +152,18 @@ public class AuctionSearch implements IAuctionSearch {
 				// If there is more than one end time constraint, return no results
 				if(endTimeConstraint != null)
 					return new SearchResult[0];
-				endTimeConstraint = constraint.getValue(); 
+				
+				String dateString = constraint.getValue();
+				Date parsed = new Date();
+		    	
+		        try {
+					parsed = inputFormat.parse(dateString);
+				} catch (java.text.ParseException e) {
+		            System.out.println("ERROR: Cannot parse \"" + dateString + "\"");
+		    		return new SearchResult[0];
+				}
+		            
+		    	endTimeConstraint = sqlFormat.format(parsed);
 			}
 			else if(constraint.getFieldName().equals(FieldName.BidderId))
 			{
@@ -253,7 +267,7 @@ public class AuctionSearch implements IAuctionSearch {
 			
 			String endTimeMySQLCondition = null;
 			if(endTimeConstraint != null)
-				endTimeMySQLCondition = "ends = " + endTimeMySQLCondition;
+				endTimeMySQLCondition = "ends = '" + endTimeMySQLCondition + "'";
 		
 			// Build the remainder of the query
 			mainQuery += " WHERE ";
