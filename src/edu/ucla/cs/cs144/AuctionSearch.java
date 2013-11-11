@@ -517,7 +517,7 @@ public class AuctionSearch implements IAuctionSearch {
 	    	}
 	    	
 			// Bid query to get all bids
-	    	ResultSet bidsRS = stmt.executeQuery("SELECT uid FROM Bid WHERE iid = " + itemId);
+	    	ResultSet bidsRS = stmt.executeQuery("SELECT * FROM Bid WHERE iid = " + itemId);
 	    	bids = new ArrayList<Bid>();
 	    	while (bidsRS.next()) 
 	    	{
