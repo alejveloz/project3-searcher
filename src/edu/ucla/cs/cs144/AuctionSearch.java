@@ -520,7 +520,7 @@ public class AuctionSearch implements IAuctionSearch {
 			
 			// User query to get Seller's info
 	    	ResultSet sellerRS = stmt.executeQuery("SELECT * from User WHERE id LIKE " + sellerId);
-	    	while (itemRS.next()) 
+	    	while (sellerRS.next()) 
 	    	{
 	    		// Check if we're somehow analyzing a second matching user
 	    		if(seller != null)
