@@ -106,23 +106,62 @@ public class AuctionSearch implements IAuctionSearch {
 		// Execute both queries and keep the intersection of the results (AND)
 		// Return the results based on return offset/num constraints
 		
+		List<String> luceneConstraints = new ArrayList<String>();		
+		List<String> bidderConstraints = new ArrayList<String>();
+		String sellerConstraint = null;
+		String buyPriceConstraint = null;
+		String endTimeConstraint = null;
 		
-		// Lucene index constraints
-		// public static final String ItemName = "ItemName";	// java.lang.String
-		// public static final String Category = "Category";	// java.lang.String
-		// public static final String Description = "Description";	// java.lang.String
+		for(int i = 0; i < constraints.length; i++)
+		{
+			SearchConstraint constraint = constraints[i];
+			
+			// Lucene constraints
+			if(constraint.getFieldName().equals(FieldName.ItemName))
+			{
+				luceneConstraints.add("name:\"" + constraint.getValue() + "\"");
+			}
+			else if(constraint.getFieldName().equals(FieldName.Category))
+			{
+				luceneConstraints.add("categories:\"" + constraint.getValue() + "\"");
+			}
+			else if(constraint.getFieldName().equals(FieldName.Description))
+			{
+				luceneConstraints.add("description:\"" + constraint.getValue() + "\"");
+			}
+			// MySQL Constraints
+			else if(constraint.getFieldName().equals(FieldName.SellerId))
+			{
+				// If there is more than one seller constraint, return no results
+				if(sellerConstraint != null)
+					return new SearchResult[0];
+				sellerConstraint = constraint.getValue();
+			}
+			else if(constraint.getFieldName().equals(FieldName.BuyPrice))
+			{
+				// If there is more than one buy price constraint, return no results
+				if(buyPriceConstraint != null)
+					return new SearchResult[0];
+				buyPriceConstraint = constraint.getValue();
+			}
+			else if(constraint.getFieldName().equals(FieldName.EndTime))
+			{
+				// If there is more than one end time constraint, return no results
+				if(endTimeConstraint != null)
+					return new SearchResult[0];
+				endTimeConstraint = constraint.getValue(); 
+			}
+			else if(constraint.getFieldName().equals(FieldName.BidderId))
+			{
+				bidderConstraints.add(constraint.getValue());
+			}
+		}
 		
 		// Lucene query format
 		// 	name:"Mariott" AND description:"Comfortable" ...
 		
 		// Build SearchResults[] luceneResults
 		
-		
-		// Mysql search constraints
-		// public static final String SellerId = "SellerId";	// java.lang.String
-		// public static final String BuyPrice = "BuyPrice";	// java.lang.Double
-		// public static final String BidderId = "BidderId";	// java.lang.String
-		// public static final String EndTime = "EndTime";		// java.util.Date
 		
 		// Narrow down one constraint at a time
 		
