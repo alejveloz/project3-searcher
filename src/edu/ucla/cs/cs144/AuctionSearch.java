@@ -468,8 +468,15 @@ public class AuctionSearch implements IAuctionSearch {
 	    		item.name = itemRS.getString("name");
 	    		item.buyPrice = Float.toString(itemRS.getFloat("buy_price"));
 	    		item.firstMinimumBid = Float.toString(itemRS.getFloat("first_bid"));
-	    		item.started = itemRS.getDate("started");
-	    		item.ends = itemRS.getDate("ends");
+	    		
+	    		try {
+					item.started = sqlFormat.parse(itemRS.getString("started"));
+		    		item.ends = sqlFormat.parse(itemRS.getString("ends"));
+				} catch (java.text.ParseException e) {
+					System.out.println("Error parsing date");
+					e.printStackTrace();
+				}
+	    		
 	    		item.description = itemRS.getString("description");
 	    		item.numBids = itemRS.getInt("number_of_bids");
 	    		item.currentBidAmount = Float.toString(itemRS.getFloat("currently"));
@@ -524,7 +531,14 @@ public class AuctionSearch implements IAuctionSearch {
 	    		Bid bid = new Bid();
 	    		
 	    		bid.itemID = bidsRS.getInt("iid");
-	    		bid.time = bidsRS.getDate("time");
+	    		
+	    		try {
+					bid.time = sqlFormat.parse(bidsRS.getString("time"));
+				} catch (java.text.ParseException e) {
+					System.out.println("Error parsing date");
+					e.printStackTrace();
+				}
+	    		
 	    		bid.userID = bidsRS.getString("uid");
 	    		bid.amount = Float.toString(bidsRS.getFloat("amount"));
 	    		    		
