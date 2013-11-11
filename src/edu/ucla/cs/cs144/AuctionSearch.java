@@ -219,8 +219,8 @@ public class AuctionSearch implements IAuctionSearch {
 		String sellerQuery = null;
 		if(sellerConstraint != null)
 		{
-			sellerQuery += "SELECT id, name, ends, buy_price FROM Item, ItemSeller WHERE Item.id = ItemSeller.iid";
-			sellerQuery += "AND ItemSeller.uid = " + sellerConstraint;
+			sellerQuery = "SELECT id, name, ends, buy_price FROM Item, ItemSeller WHERE Item.id = ItemSeller.iid";
+			sellerQuery += " AND ItemSeller.uid LIKE \"" + sellerConstraint + "\"";
 		}
 		
 		// Create the SQL query
