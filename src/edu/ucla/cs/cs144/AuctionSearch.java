@@ -157,6 +157,20 @@ public class AuctionSearch implements IAuctionSearch {
 			}
 		}
 		
+		// Keep note of the existence of constraint types
+		boolean luceneConstraintsExist;
+		boolean sqlConstraintsExist;
+		
+		if(luceneConstraints.size() > 0)
+			luceneConstraintsExist = true;
+		else
+			luceneConstraintsExist = false;
+		
+		if(bidderConstraints.size() > 0 || sellerConstraint != null || buyPriceConstraint != null || endTimeConstraint != null)
+			sqlConstraintsExist = true;
+		else
+			sqlConstraintsExist = false;
+		
 		// Build a lucene query
 		// 	name:"Mariott" AND description:"Comfortable" ...
 		String luceneQuery = null;
@@ -170,9 +184,11 @@ public class AuctionSearch implements IAuctionSearch {
 
 		
 		// Build List<SearchResults> luceneResults if we've built a Lucene query
-		List<SearchResult> luceneResults = new ArrayList<SearchResult>();
+		List<SearchResult> luceneResults = null;
 		if(luceneQuery != null)
 		{
+			luceneResults = new ArrayList<SearchResult>();
+			
 			try {
 				Hits hits = luceneSearchEngine.performAdvancedSearch(luceneQuery);
 				
@@ -285,7 +301,7 @@ public class AuctionSearch implements IAuctionSearch {
 	    		int id = rs.getInt("id");
 	    		String name = rs.getString("name");
 	    		
-	    		// If there exist bidder constraints, anaylze them. Otherwise add the result
+	    		// If there exist bidder constraints, analyze them. Otherwise add the result
 	    		if(bidderConstraints.size() > 0)
 	    		{
 	    			// Get all the bidders on the item
@@ -336,11 +352,38 @@ public class AuctionSearch implements IAuctionSearch {
     		return new SearchResult[0];
     	}
     	
-		// Build SearchResults[] mySQLResults
 		
-		
-		// Create the intersection of luceneResults[] and mySQLResults[]
-		
+		// Create the intersection of List<SearchResult> luceneResults List<SearchResult> mySQLResults
+    	List<SearchResult> results = new ArrayList<SearchResult>();
+    	
+    	// If there are no lucene constraints, use mysql results
+    	if(!luceneConstraintsExist)
+    	{
+    		results = mySQLResults;
+    	}
+    	// If lucene constraints exist and there are no sql constraints, lucene results are valid
+    	else if(!sqlConstraintsExist)
+    	{
+    		results = luceneResults;
+    	}
+    	// Otherwise we must calculate the intersection
+    	else
+    	{
+    		for(int i=0; i < luceneResults.size(); i++)
+    		{
+    			for(int j=0; j < mySQLResults.size(); j++)
+    			{
+    				SearchResult lucene = luceneResults.get(i);
+    				SearchResult mySQL = mySQLResults.get(j);
+    				
+    				if(lucene.getItemId().equals(mySQL.getItemId()) && lucene.getName().equals(mySQL.getName()))
+    				{
+    					results.add(new SearchResult(lucene.getItemId(), lucene.getName()));
+    				}
+    			}
+    		}
+    	}
+    	
 		// Return the specified offset/number of results
 		
 		return new SearchResult[0];
