@@ -106,19 +106,54 @@ public class AuctionSearch implements IAuctionSearch {
 		// Execute both queries and keep the intersection of the results (AND)
 		// Return the results based on return offset/num constraints
 		
-		// Lucene index
-		// item name
-		// category
-		// description
 		
-		// name:"Mariott" AND description:"Comfortable"
+		// Lucene index constraints
+		// public static final String ItemName = "ItemName";	// java.lang.String
+		// public static final String Category = "Category";	// java.lang.String
+		// public static final String Description = "Description";	// java.lang.String
 		
-		// Mysql search
-		// seller
-		// buy price
-		// bidder
-		// ending time
+		// Lucene query format
+		// 	name:"Mariott" AND description:"Comfortable" ...
 		
+		// Build SearchResults[] luceneResults
+		
+		
+		// Mysql search constraints
+		// public static final String SellerId = "SellerId";	// java.lang.String
+		// public static final String BuyPrice = "BuyPrice";	// java.lang.Double
+		// public static final String BidderId = "BidderId";	// java.lang.String
+		// public static final String EndTime = "EndTime";		// java.util.Date
+		
+		// Narrow down one constraint at a time
+		
+		// First by seller ID
+		// SELECT id, name, ends, buy_price FROM Item, ItemSeller WHERE Item.id = ItemSeller.iid AND ItemSeller.uid = [SellerId] AND ....
+		
+		// This gives us all items sold by the specified seller
+		// Result1(id, name, ends, buy_price)
+		
+		// Next narrow by buy price and end time
+		// SELECT (id, name) FROM Result1 WHERE ends = [EndTime] AND buy_price = [BuyPrice] ...
+		
+		// This gives us all items sold by specified seller with specified end time and specified buy price
+		// Result2(id, name)
+		
+		// It's likley that this will narrow it down to all desired items, but finally we must check they satisfy bidder constraints
+		// We'll take the results of the above query and process each one
+		
+		// For each remaining item
+		// Get all the bidders on the item
+		// Create an array list of all the bidders
+		// For each Bidder constraint, verify it is contained in the array list
+		// If any Bidder constraint is not satisfied, disregard this item
+		// If all Bidder constraints are satisfied, add this Item to the search results
+		
+		// Build SearchResults[] mySQLResults
+		
+		
+		// Create the intersection of luceneResults[] and mySQLResults[]
+		
+		// Return the specified offset/number of results
 		
 		return new SearchResult[0];
 	}
