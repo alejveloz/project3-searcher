@@ -482,13 +482,14 @@ public class AuctionSearch implements IAuctionSearch {
 			// Bid query to get all bidders
 			
 			// Series of User queries to get bidder info
-
+	    	
     	} catch (SQLException ex) {
     		System.out.println(ex);
     		return null;
     	}
 		
-		return null;
+    	// TODO: Use real XML return
+		return "<Result>Under Construction</Result>";
 	}
 	
 	public String echo(String message) {
