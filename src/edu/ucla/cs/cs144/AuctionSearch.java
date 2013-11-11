@@ -474,6 +474,7 @@ public class AuctionSearch implements IAuctionSearch {
 			
 			// Objects to build
 			Item item = null;
+			String sellerId = null;
 			User seller = null;
 			ArrayList<String> categories = null;
 			ArrayList<Bid> bids = null;
@@ -506,6 +507,19 @@ public class AuctionSearch implements IAuctionSearch {
 	    	}
 			
 			// ItemSeller query to get seller's ID
+	    	ResultSet sellerIdRS = stmt.executeQuery("SELECT uid FROM ItemSeller WHERE iid =" + itemId);
+	    	
+	    	while (sellerIdRS.next()) 
+	    	{
+	    		// Check if we're somehow analyzing a second matching seller
+	    		if(sellerId != null)
+	    		{
+	    			System.out.println("Database inconsistency, duplicate seller id");
+	    			break;
+	    		}
+	    		
+	    		sellerId = sellerIdRS.getString("uid");
+	    	}
 			
 			// User query to get Seller's info
 			
