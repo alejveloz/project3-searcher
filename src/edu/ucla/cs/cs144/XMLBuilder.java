@@ -175,6 +175,11 @@ public class XMLBuilder {
 			Element startedElement = doc.createElement("Started");
 			itemElement.appendChild(startedElement);
 			startedElement.appendChild(doc.createTextNode(inputFormat.format(item.started)));
+
+			// Ends element
+			Element endsElement = doc.createElement("Ends");
+			itemElement.appendChild(endsElement);
+			endsElement.appendChild(doc.createTextNode(inputFormat.format(item.ends)));
 			
 			// staff elements
 			/*Element staff = doc.createElement("Staff");
