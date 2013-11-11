@@ -78,7 +78,16 @@ public class AuctionSearchTest {
 		}
 		System.out.println("");
 		
-		//EndTime:Dec-14-01 21:00:05 (1)
+		SearchConstraint[] constraints4 = {
+				new SearchConstraint(FieldName.EndTime, "Dec-14-01 21:00:05")
+				};
+		SearchResult[] advancedResults4 = as.advancedSearch(constraints4, 0, 20);
+		System.out.println("Advanced Seacrh");
+		System.out.println("Received " + advancedResults4.length + " results");
+		for(SearchResult result : advancedResults4) {
+			//System.out.println(result.getItemId() + ": " + result.getName());
+		}
+		System.out.println("");
 		
 		String itemId = "1497595357";
 		String item = as.getXMLDataForItemId(itemId);
