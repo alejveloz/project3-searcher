@@ -466,7 +466,9 @@ public class AuctionSearch implements IAuctionSearch {
 	    		
 	    		item.itemID = itemRS.getInt("id");
 	    		item.name = itemRS.getString("name");
-	    		item.buyPrice = Float.toString(itemRS.getFloat("buy_price"));
+	    		Float buyPrice = itemRS.getFloat("buy_price");
+	    		if(buyPrice != 0)
+	    			item.buyPrice = Float.toString(buyPrice);
 	    		item.firstMinimumBid = Float.toString(itemRS.getFloat("first_bid"));
 	    		
 	    		try {
