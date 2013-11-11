@@ -92,6 +92,14 @@ public class XMLBuilder {
 			itemElement.appendChild(currentlyElement);
 			currentlyElement.appendChild(doc.createTextNode(item.currentBidAmount));
 			
+			if(item.buyPrice != null)
+			{
+				// Buy_Price element
+				Element buyPriceElement = doc.createElement("Buy_Price");
+				itemElement.appendChild(buyPriceElement);
+				buyPriceElement.appendChild(doc.createTextNode(item.buyPrice));
+			}
+			
 			// staff elements
 			/*Element staff = doc.createElement("Staff");
 			rootElement.appendChild(staff);
