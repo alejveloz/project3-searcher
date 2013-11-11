@@ -87,6 +87,11 @@ public class XMLBuilder {
 				categoryElement.appendChild(doc.createTextNode(categories.get(i)));
 			}
 			
+			// Current element
+			Element currentlyElement = doc.createElement("Currently");
+			itemElement.appendChild(currentlyElement);
+			currentlyElement.appendChild(doc.createTextNode(item.currentBidAmount));
+			
 			// staff elements
 			/*Element staff = doc.createElement("Staff");
 			rootElement.appendChild(staff);
