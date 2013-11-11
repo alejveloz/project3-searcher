@@ -97,7 +97,7 @@ public class XMLBuilder {
 			currentlyElement.appendChild(doc.createTextNode("$" + item.currentBidAmount));
 
 			// Buy_Price element
-			if(item.buyPrice != null && item.buyPrice != "0.0")
+			if(item.buyPrice != null && !item.buyPrice.equals("0.0"))
 			{
 				Element buyPriceElement = doc.createElement("Buy_Price");
 				itemElement.appendChild(buyPriceElement);
