@@ -442,7 +442,7 @@ public class AuctionSearch implements IAuctionSearch {
 		String sellerId = null;
 		User seller = null;
 		ArrayList<String> categories = null;
-		ArrayList<String> bidderIds = null;
+		ArrayList<Bid> bids = null;
 		ArrayList<User> bidders = null;
 		
 		// Execute the queries
@@ -518,17 +518,24 @@ public class AuctionSearch implements IAuctionSearch {
 	    	
 			// Bid query to get all bids
 	    	ResultSet bidsRS = stmt.executeQuery("SELECT uid FROM Bid WHERE iid = " + itemId);
-	    	bidderIds = new ArrayList<String>();
+	    	bids = new ArrayList<Bid>();
 	    	while (bidsRS.next()) 
 	    	{
-	    		bidderIds.add(bidsRS.getString("uid"));
+	    		Bid bid = new Bid();
+	    		
+	    		bid.itemID = bidsRS.getInt("iid");
+	    		bid.time = bidsRS.getDate("time");
+	    		bid.userID = bidsRS.getString("uid");
+	    		bid.amount = Float.toString(bidsRS.getFloat("amount"));
+	    		    		
+	    		bids.add(bid);
 	    	}
 			
 			// Series of User queries to get bidder info
 	    	bidders = new ArrayList<User>();
-	    	for(int i = 0; i < bidderIds.size(); i++)
+	    	for(int i = 0; i < bids.size(); i++)
 	    	{
-	    		ResultSet bidderRS = stmt.executeQuery("SELECT * FROM User WHERE id LIKE \"" + bidderIds.get(i) + "\"");
+	    		ResultSet bidderRS = stmt.executeQuery("SELECT * FROM User WHERE id LIKE \"" + bids.get(i).userID + "\"");
 	    		User bidder = null;
 	    		while (bidderRS.next()) 
 		    	{
@@ -592,9 +599,8 @@ public class AuctionSearch implements IAuctionSearch {
 		     <!ELEMENT Description	   (#PCDATA)>
 		 */
     	
-		
-    	// TODO: Use real XML return
-		return "<Result>Under Construction</Result>";
+    	XMLBuilder xmlBuilder = new XMLBuilder();
+		return xmlBuilder.itemXMLString(item, seller, categories, bids, bidders);
 	}
 	
 	public String echo(String message) {
