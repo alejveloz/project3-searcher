@@ -490,7 +490,7 @@ public class AuctionSearch implements IAuctionSearch {
 	    	}
 			
 			// User query to get Seller's info
-	    	ResultSet sellerRS = stmt.executeQuery("SELECT * from User WHERE id LIKE " + sellerId);
+	    	ResultSet sellerRS = stmt.executeQuery("SELECT * from User WHERE id LIKE \"" + sellerId + "\"");
 	    	while (sellerRS.next()) 
 	    	{
 	    		// Check if we're somehow analyzing a second matching user
@@ -528,7 +528,7 @@ public class AuctionSearch implements IAuctionSearch {
 	    	bidders = new ArrayList<User>();
 	    	for(int i = 0; i < bidderIds.size(); i++)
 	    	{
-	    		ResultSet bidderRS = stmt.executeQuery("SELECT * FROM User WHERE id LIKE " + bidderIds.get(i));
+	    		ResultSet bidderRS = stmt.executeQuery("SELECT * FROM User WHERE id LIKE \"" + bidderIds.get(i) + "\"");
 	    		User bidder = null;
 	    		while (bidderRS.next()) 
 		    	{
