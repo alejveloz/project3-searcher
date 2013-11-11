@@ -193,31 +193,149 @@ public class AuctionSearch implements IAuctionSearch {
 			}
 		}
 		
+		// List<SearchResult> luceneResults now has all results of lucene query
 		
-		// Narrow down one constraint at a time
+		// Next we handle MySQL results
 		
-		// First by seller ID
-		// SELECT id, name, ends, buy_price FROM Item, ItemSeller WHERE Item.id = ItemSeller.iid AND ItemSeller.uid = [SellerId] AND ....
-		
+		// Create seller ID query
 		// This gives us all items sold by the specified seller
 		// Result1(id, name, ends, buy_price)
+		String sellerQuery = null;
+		if(sellerConstraint != null)
+		{
+			sellerQuery += "SELECT id, name, ends, buy_price FROM Item, ItemSeller WHERE Item.id = ItemSeller.iid";
+			sellerQuery += "AND ItemSeller.uid = " + sellerConstraint;
+		}
 		
-		// Next narrow by buy price and end time
-		// SELECT (id, name) FROM Result1 WHERE ends = [EndTime] AND buy_price = [BuyPrice] ...
+		// Create the SQL query
+		String mainQuery = "";
 		
-		// This gives us all items sold by specified seller with specified end time and specified buy price
-		// Result2(id, name)
+		// If there are no constraints on buy price, end time, or seller query, get all items
+		if(buyPriceConstraint == null && endTimeConstraint == null && sellerQuery == null)
+		{
+			mainQuery = "SELECT id, name FROM Item";
+		}
+		// If there are constraints on buy price and/or end time constraint, refine query
+		else if(buyPriceConstraint != null || endTimeConstraint != null)
+		{
+			mainQuery = "Select id, name FROM ";
+			
+			// The table we select from depends on whether there is a seller constraint
+			if(sellerConstraint != null)
+			{
+				mainQuery += "(" + sellerQuery + ")";
+			}
+			else
+			{
+				mainQuery += "Item";
+			}
+			
+			// Now we consider buy price and/or end time constraints
+			String buyPriceMySQLCondition = null;
+			if(buyPriceConstraint != null)
+				buyPriceMySQLCondition = "buy_price = " + buyPriceConstraint;
+			
+			String endTimeMySQLCondition = null;
+			if(endTimeConstraint != null)
+				endTimeMySQLCondition = "ends = " + endTimeMySQLCondition;
 		
-		// It's likley that this will narrow it down to all desired items, but finally we must check they satisfy bidder constraints
-		// We'll take the results of the above query and process each one
+			// Build the remainder of the query
+			mainQuery += " WHERE ";
+			
+			// Three possibilities to append the conditions
+			if(buyPriceMySQLCondition != null && endTimeMySQLCondition == null)
+			{
+				mainQuery += buyPriceMySQLCondition;
+			}
+			else if(buyPriceMySQLCondition == null && endTimeMySQLCondition != null)
+			{
+				mainQuery += endTimeMySQLCondition;
+			}
+			else
+			{
+				mainQuery += buyPriceMySQLCondition + " AND " + endTimeMySQLCondition;
+			}
+		}
+		// Then the only remaining constraint is a seller constraint
+		else
+		{
+			mainQuery = sellerQuery;
+		}
 		
-		// For each remaining item
-		// Get all the bidders on the item
-		// Create an array list of all the bidders
-		// For each Bidder constraint, verify it is contained in the array list
-		// If any Bidder constraint is not satisfied, disregard this item
-		// If all Bidder constraints are satisfied, add this Item to the search results
 		
+
+		// Build List<SearchResults> mySQLResults based on main query and bidder analysis
+		List<SearchResult> mySQLResults = new ArrayList<SearchResult>();
+		
+		// Create connection and statement variables
+		Connection conn = null;
+		Statement stmt = null;
+
+        // Execute the query
+    	try {
+    		conn = DbManager.getConnection(true);
+			stmt = conn.createStatement();
+    	
+			// Execute the query
+	    	ResultSet rs = stmt.executeQuery(mainQuery);
+
+	    	// Process each result
+	    	while (rs.next()) 
+	    	{
+	    		int id = rs.getInt("id");
+	    		String name = rs.getString("name");
+	    		
+	    		// If there exist bidder constraints, anaylze them. Otherwise add the result
+	    		if(bidderConstraints.size() > 0)
+	    		{
+	    			// Get all the bidders on the item
+		    		Statement subStmt = conn.createStatement();
+					ResultSet biddersRs = subStmt.executeQuery("SELECT uid FROM Bid WHERE iid =" + id);
+					
+					
+		    		// Create an array list of all the bidders
+					ArrayList<String> bidders = new ArrayList<String>();
+					while(biddersRs.next())
+					{
+						bidders.add(biddersRs.getString("uid"));
+					}
+					
+		    		// For each Bidder constraint, verify it is contained in the array list
+					boolean constraintFailed = false;
+					for(int i = 0; i < bidderConstraints.size(); i++)
+					{
+						// If any Bidder constraint is not satisfied, mark bidder constraint as failed
+						// We will disregard an item that has failed any bidder constraint
+						if(!bidders.contains(bidderConstraints.get(i)))
+							constraintFailed = true;
+					}
+					
+		    		// If we didn't fail any bidder constraints, add this Item to the search results
+					if(!constraintFailed)
+					{
+						SearchResult result = new SearchResult(Integer.toString(id), name);
+		    			mySQLResults.add(result);
+					}
+					// Otherwise continue to the next possible item
+					else
+					{
+						continue;
+					}
+	    		}
+	    		else
+	    		{
+	    			SearchResult result = new SearchResult(Integer.toString(id), name);
+	    			mySQLResults.add(result);
+	    		}
+	    		
+	    	}
+    		
+    	
+    	} catch (SQLException ex) {
+    		System.out.println(ex);
+    		return new SearchResult[0];
+    	}
+    	
 		// Build SearchResults[] mySQLResults
 		
 		
