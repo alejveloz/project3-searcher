@@ -554,6 +554,29 @@ public class AuctionSearch implements IAuctionSearch {
 	    	}
 			
 			// Series of User queries to get bidder info
+	    	bidders = new ArrayList<User>();
+	    	for(int i = 0; i < bidderIds.size(); i++)
+	    	{
+	    		ResultSet bidderRS = stmt.executeQuery("SELECT * FROM User WHERE id LIKE " + bidderIds.get(i));
+	    		User bidder = null;
+	    		while (bidderRS.next()) 
+		    	{
+		    		// Check if we're somehow analyzing a second matching user
+		    		if(bidder != null)
+		    		{
+		    			System.out.println("Database inconsistency, duplicate bidder User");
+		    			break;
+		    		}
+		    		
+		    		bidder = new User();
+		    		
+		    		bidder.userID = bidderRS.getString("id");
+		    		bidder.rating = bidderRS.getInt("rating");
+		    		bidder.location = bidderRS.getString("location");
+		    		bidder.country = bidderRS.getString("country");
+		    	}
+	    		bidders.add(bidder);	
+	    	}
 	    	
     	} catch (SQLException ex) {
     		System.out.println(ex);
